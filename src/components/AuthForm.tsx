@@ -1,26 +1,73 @@
 'use client'
-import axios from "axios";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { registerUser } from "../services/userService";
+import { useUserStore } from "../store/userStore";
+
 
 export const AuthForm = () => {
-    const [isRegistered, setIsRegistered] = useState(false);
+    const [isRegistered, setIsRegistered] = useState(true);
+    const router = useRouter();
     const [formData, setFormData] = useState({
-        docType: 'DNI',
-        docNumber: '',
-        fullName: '',
+        document_type: 'DNI',
+        document_number: '',
+        name: '',
         password: '',
         birthDate: ''
     });
 
     const docTypes = ['DNI', 'Pasaporte', 'Cédula', 'Licencia'];
+    const [formError, setFormError] = useState<string | null>(null); // Error general
 
+    const validateForm = (): boolean => {
+        // Validar Número de Documento (solo números, mínimo 5 dígitos)
+        if (!/^\d{5,15}$/.test(formData.document_number)) {
+            setFormError("Número de documento inválido (5-15 dígitos numéricos).");
+            return false;
+        }
+
+        // Validar Nombre (permitir espacios, pero no al inicio o final)
+        if (!/^[A-Za-zÁÉÍÓÚáéíóúñÑ]+(?: [A-Za-zÁÉÍÓÚáéíóúñÑ]+)*$/.test(formData.name)) {
+            setFormError("Nombre inválido. No debe contener espacios al inicio o final.");
+        }
+
+        // // Validar Contraseña (mínimo 8 caracteres, al menos una mayúscula y un número)
+        // if (!/^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/.test(formData.password)) {
+        //     setFormError("Contraseña inválida. Debe tener mínimo 8 caracteres, una mayúscula y un número.");
+        //     return false;
+        // }
+
+        // // Validar Fecha de Nacimiento (mayor de 18 años)
+        // const birthDate = new Date(formData.birthDate);
+        // const age = new Date().getFullYear() - birthDate.getFullYear();
+        // if (isNaN(birthDate.getTime()) || age < 18) {
+        //     setFormError("Debes ser mayor de 18 años para registrarte.");
+        //     return false;
+        // }
+
+        setFormError(null);
+        return true;
+    };
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const endpoint = isRegistered ? '/api/login' : '/api/register';
+        if (!validateForm()) return;
+        const endpoint = isRegistered ? '/users/login' : '/users/register';
 
         try {
-            const response = await axios.post(`http://localhost:3001${endpoint}`, formData);
-            console.log(isRegistered ? 'Login exitoso' : 'Registro exitoso', response.data);
+            console.log('formData:', formData);
+            if (isRegistered) {
+                const fakeUser = { id: "4", name: "John Riaño" };
+                
+                useUserStore.getState().setUser(fakeUser.id, fakeUser.name);
+                router.push("/vote");
+            } else {
+                const response = await registerUser(formData);
+                useUserStore.getState().setUser(response.user[0].document_number, response.user[0].name);
+                console.log("Usuario registrado: " + response);
+                console.log(isRegistered ? 'Login exitoso' : 'Registro exitoso', response.user);
+                router.push("/vote");
+            }
+
         } catch (error) {
             console.error('Error:', error);
         }
@@ -38,13 +85,17 @@ export const AuthForm = () => {
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
                 {isRegistered ? 'Iniciar Sesión' : 'Registro de Votante'}
             </h2>
-
+            {formError && (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
+                    {formError}
+                </div>
+            )}
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                     <label className="block text-gray-700 mb-2">Tipo de Documento</label>
                     <select
-                        name="docType"
-                        value={formData.docType}
+                        name="document_type"
+                        value={formData.document_type}
                         onChange={handleInputChange}
                         className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
@@ -58,8 +109,8 @@ export const AuthForm = () => {
                     <label className="block text-gray-700 mb-2">Número de Documento</label>
                     <input
                         type="text"
-                        name="docNumber"
-                        value={formData.docNumber}
+                        name="document_number"
+                        value={formData.document_number}
                         onChange={handleInputChange}
                         className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         placeholder="12345678"
@@ -72,14 +123,14 @@ export const AuthForm = () => {
                             <label className="block text-gray-700 mb-2">Nombre Completo</label>
                             <input
                                 type="text"
-                                name="fullName"
-                                value={formData.fullName}
+                                name="name"
+                                value={formData.name}
                                 onChange={handleInputChange}
                                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 placeholder="Juan Pérez"
                             />
                         </div>
-
+                        {/* 
                         <div>
                             <label className="block text-gray-700 mb-2">Fecha de Nacimiento</label>
                             <input
@@ -89,7 +140,7 @@ export const AuthForm = () => {
                                 onChange={handleInputChange}
                                 className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             />
-                        </div>
+                        </div> */}
                     </>
                 )}
 

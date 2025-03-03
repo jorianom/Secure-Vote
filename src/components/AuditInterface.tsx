@@ -1,4 +1,5 @@
 'use client'
+import { getVoteCount } from "@/services/userService";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -18,12 +19,8 @@ export const AuditInterface = () => {
     useEffect(() => {
         const fetchResults = async () => {
             try {
-                // const response = await axios.get("http://localhost:3001/api/results");
-                // let data = response.data;
-                let data = [
-                    { "id": "candidato1", "name": "María García", "image": "https://picsum.photos/200/200", "votes": 1500 },
-                    { "id": "candidato2", "name": "Carlos Rodríguez", "image": "https://picsum.photos/200/200", "votes": 2300 }
-                ]
+                const data = await getVoteCount();
+                console.log("Data:", data);
                 const total = data.reduce((sum: number, candidate: CandidateResult) => sum + candidate.votes, 0);
                 const resultsWithPercentage = data.map((candidate: CandidateResult) => ({
                     ...candidate,

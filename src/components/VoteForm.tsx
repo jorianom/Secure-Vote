@@ -1,32 +1,48 @@
-'use client'
-import axios from "axios";
-import { useState } from "react";
+"use client";
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import Image from "next/image";
+import { voteCandidate } from "@/services/userService";
+import { useUserStore } from "@/store/userStore";
 
 const candidates = [
-  { id: "candidato1", name: "María García", image: "https://picsum.photos/200/300" },
-  { id: "candidato2", name: "Carlos Rodríguez", image: "https://picsum.photos/200/200" },
-  { id: "candidato3", name: "Ana Fernández", image: "https://picsum.photos/400/300" },
-  { id: "candidato4", name: "Luis Martínez", image: "https://picsum.photos/300/300" }
+    { id: "candidato1", name: "María García", image: "https://picsum.photos/200/300" },
+    { id: "candidato2", name: "Carlos Rodríguez", image: "https://picsum.photos/200/200" },
+    { id: "candidato3", name: "Ana Fernández", image: "https://picsum.photos/400/300" },
+    { id: "candidato4", name: "Luis Martínez", image: "https://picsum.photos/300/300" }
 ];
 
 export const VoteForm = ({ voterId }: { voterId: string }) => {
+    if (voterId === null) return null; 
+    const { userId, name } = useUserStore();
     const [selectedCandidate, setSelectedCandidate] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [voteSuccess, setVoteSuccess] = useState(false);
+    const [isClient, setIsClient] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+
+    useEffect(() => {
+        setIsClient(true); // 🔹 Asegura que el componente solo se renderice en el cliente
+    }, []);
+
+    if (!isClient) return null; // 🔹 Evita el renderizado en el servidor (SSR)
+
+    // if (!voterId) return <p className="text-center text-red-500">Error: Voter ID no encontrado.</p>;
+
 
     const handleVote = async () => {
-        if (!selectedCandidate) return;
-        
+        if (!selectedCandidate || !userId) return;
         setIsSubmitting(true);
+        setError(null);
+
         try {
-            const response = await axios.post("http://localhost:3001/api/vote", {
-                voterId,
-                candidate: selectedCandidate,
-            });
-            console.log("Voto firmado:", response.data.signedVote);
+            console.log("Enviando voto...", userId, selectedCandidate);
+            const response = await voteCandidate(userId, selectedCandidate);
+            console.log("Voto registrado:", response);
             setVoteSuccess(true);
-        } catch (error) {
-            console.error("Error al votar:", error);
+        } catch (err) {
+            setError("Error al enviar el voto.");
         } finally {
             setIsSubmitting(false);
         }
@@ -38,22 +54,23 @@ export const VoteForm = ({ voterId }: { voterId: string }) => {
                 <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
                     Elecciones 2024
                 </h2>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {candidates.map((candidate) => (
                         <div
                             key={candidate.id}
                             onClick={() => setSelectedCandidate(candidate.id)}
-                            className={`cursor-pointer p-6 rounded-xl transition-all duration-300 ${
-                                selectedCandidate === candidate.id
-                                    ? "bg-blue-50 border-2 border-blue-500"
-                                    : "bg-white border-2 border-gray-200 hover:border-blue-300"
-                            }`}
+                            className={`cursor-pointer p-6 rounded-xl transition-all duration-300 ${selectedCandidate === candidate.id
+                                ? "bg-blue-50 border-2 border-blue-500"
+                                : "bg-white border-2 border-gray-200 hover:border-blue-300"
+                                }`}
                         >
                             <div className="flex flex-col items-center">
-                                <img
+                                <Image
                                     src={candidate.image}
                                     alt={candidate.name}
+                                    width={128}
+                                    height={128}
                                     className="w-32 h-32 rounded-full object-cover mb-4"
                                 />
                                 <h3 className="text-xl font-semibold text-gray-800 text-center">
@@ -71,11 +88,10 @@ export const VoteForm = ({ voterId }: { voterId: string }) => {
                     <button
                         onClick={handleVote}
                         disabled={!selectedCandidate || isSubmitting}
-                        className={`px-8 py-3 rounded-lg font-medium text-lg ${
-                            selectedCandidate && !isSubmitting
-                                ? "bg-blue-600 text-white hover:bg-blue-700"
-                                : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        } transition-colors duration-300`}
+                        className={`px-8 py-3 rounded-lg font-medium text-lg ${selectedCandidate && !isSubmitting
+                            ? "bg-blue-600 text-white hover:bg-blue-700"
+                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            } transition-colors duration-300`}
                     >
                         {isSubmitting ? "Enviando voto..." : "Confirmar Voto"}
                     </button>
@@ -89,4 +105,8 @@ export const VoteForm = ({ voterId }: { voterId: string }) => {
             </div>
         </div>
     );
+};
+
+VoteForm.propTypes = {
+    voterId: PropTypes.string.isRequired // 🛡️ Valida que voterId sea string y obligatorio
 };

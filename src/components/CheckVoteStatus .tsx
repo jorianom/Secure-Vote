@@ -34,7 +34,6 @@ export const CheckVoteStatus = () => {
             }
             try {
                 const result = await hasUserVoted(userId);
-                console.log('hasUserVoted:', result);
                 setHasVoted(result.hasVoted);
                 setDataVote(result.vote as VoteData);
             } catch (error) {

@@ -17,9 +17,7 @@ export const registerUser = async (userData: { document_type: string; document_n
 };
 export const loginUser = async (userData: { document_number: string; password: string; document_type: string; }) => {
     try {
-        console.log("userData:", userData);
         const response = await axiosClient.post("/api/users/login", userData);
-        console.log("Usuario logueado: ", response);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {

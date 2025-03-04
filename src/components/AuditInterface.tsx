@@ -20,7 +20,6 @@ export const AuditInterface = () => {
         const fetchResults = async () => {
             try {
                 const data = await getVoteCount();
-                console.log("Data:", data);
                 const total = data.reduce((sum: number, candidate: CandidateResult) => sum + candidate.votes, 0);
                 const resultsWithPercentage = data.map((candidate: CandidateResult) => ({
                     ...candidate,

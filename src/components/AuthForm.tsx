@@ -63,18 +63,15 @@ export const AuthForm = () => {
         if (!validateForm()) return;
 
         try {
-            console.log('formData:', formData);
             if (isRegistered) {
                 const response = await loginUser({ document_number: formData.document_number, password: formData.password, document_type: formData.document_type });
-                console.log("Usuario logueado: ", response);
                 useUserStore.getState().setUserLogin(response.user.id, response.user.name, response.token);
                 login(response.user.id);
                 router.push("/vote");
             } else {
-                const response = await registerUser(formData);
+                await registerUser(formData);
                 resetForm();
                 setIsRegistered(true);
-                console.log("Usuario registrado: ", response);
                 router.push("/");
             }
 

@@ -19,11 +19,10 @@ interface VoteConfirmationProps {
 }
 
 export const VoteConfirmation = ({ voteData, name }: VoteConfirmationProps) => {
-    console.log('voteData:', voteData);
-    const truncateHash = 
-    (hash: string, length = 6) => {
-        return `${hash.substring(0, length)}...${hash.substring(hash.length - length)}`;
-    };
+    const truncateHash =
+        (hash: string, length = 6) => {
+            return `${hash.substring(0, length)}...${hash.substring(hash.length - length)}`;
+        };
     return (
         <div className="min-h-screen bg-gray-50 rounded-lg flex items-center justify-center p-4">
             <div className="max-w-2xl w-full bg-white rounded-xl shadow-lg p-8 relative overflow-hidden">
@@ -81,7 +80,7 @@ export const VoteConfirmation = ({ voteData, name }: VoteConfirmationProps) => {
                             <div>
                                 <label className="block text-sm font-medium text-gray-600">Fecha del Voto</label>
                                 <p className="mt-1 text-gray-800">
-                                    {new Date(voteData.created_at).toLocaleString()}
+                                    {new Date(voteData.created_at).toLocaleString("es-ES", { timeZone: "America/Bogota" })}
                                 </p>
                             </div>
                             <div>

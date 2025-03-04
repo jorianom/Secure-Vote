@@ -10,7 +10,6 @@ const Navbar = () => {
     const { userId, name, clearUser } = useUserStore();
     const [menuOpen, setMenuOpen] = useState(false);
     const router = useRouter();
-    console.log(name);
     const handleLogout = () => {
         clearUser();
         logout();

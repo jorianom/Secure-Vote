@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import Image from "next/image";
 import { voteCandidate } from "@/services/userService";
 import { useUserStore } from "@/store/userStore";
-import { useRouter } from 'next/navigation'
 
 const candidates = [
     { id: "candidato1", name: "María García", image: "https://picsum.photos/200/300" },
@@ -14,13 +13,13 @@ const candidates = [
 ];
 
 export const VoteForm = ({ voterId }: { voterId: string }) => {
-    const router = useRouter();
     const { userId } = useUserStore();
     const [selectedCandidate, setSelectedCandidate] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [voteSuccess, setVoteSuccess] = useState(false);
     const [isClient, setIsClient] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    console.log("error", error);
     useEffect(() => {
         setIsClient(true); // 🔹 Asegura que el componente solo se renderice en el cliente
     }, []);
@@ -36,9 +35,7 @@ export const VoteForm = ({ voterId }: { voterId: string }) => {
         setError(null);
 
         try {
-            console.log("Enviando voto...", userId, selectedCandidate);
-            const response = await voteCandidate(userId, selectedCandidate);
-            console.log("Voto registrado:", response);
+            await voteCandidate(userId, selectedCandidate);
             setVoteSuccess(true);
             setTimeout(() => window.location.href = '/vote', 3000);
         } catch (err) {

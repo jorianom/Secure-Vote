@@ -15,7 +15,7 @@ const ProtectedAuth = ({ children }: { children: React.ReactNode }) => {
         } else {
             setLoading(false); // 🔹 Si está autenticado, muestra la página
         }
-    }, [userId]);
+    }, [userId, router]);
 
     if (loading) return <p className="text-center text-gray-500">Redirecting...</p>;
 

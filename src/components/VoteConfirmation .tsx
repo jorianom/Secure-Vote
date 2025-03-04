@@ -1,8 +1,24 @@
 'use client'
-import Image from "next/image";
 import { CheckCircle2 } from "lucide-react";
 
-export const VoteConfirmation = ({ voteData, name }) => {
+interface VoteData {
+    candidate: {
+        image: string;
+        name: string;
+    };
+    document_number: string;
+    r: string;
+    s: string;
+    created_at: string;
+    transaction_id: string;
+}
+
+interface VoteConfirmationProps {
+    voteData: VoteData;
+    name: string;
+}
+
+export const VoteConfirmation = ({ voteData, name }: VoteConfirmationProps) => {
     console.log('voteData:', voteData);
     const truncateHash = 
     (hash: string, length = 6) => {

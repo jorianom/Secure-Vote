@@ -15,22 +15,20 @@ const candidates = [
 
 export const VoteForm = ({ voterId }: { voterId: string }) => {
     const router = useRouter();
-    if (voterId === null) return null;
-    const { userId, name } = useUserStore();
+    const { userId } = useUserStore();
     const [selectedCandidate, setSelectedCandidate] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [voteSuccess, setVoteSuccess] = useState(false);
     const [isClient, setIsClient] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
-
+    console.log("userId:", error);
     useEffect(() => {
         setIsClient(true); // 🔹 Asegura que el componente solo se renderice en el cliente
     }, []);
 
     if (!isClient) return null; // 🔹 Evita el renderizado en el servidor (SSR)
 
-    // if (!voterId) return <p className="text-center text-red-500">Error: Voter ID no encontrado.</p>;
+    if (voterId === null || !isClient) return null; // 🔹 Evita el renderizado en el servidor (SSR)
 
 
     const handleVote = async () => {
@@ -45,6 +43,7 @@ export const VoteForm = ({ voterId }: { voterId: string }) => {
             setVoteSuccess(true);
             setTimeout(() => router.push('/'), 2000);
         } catch (err) {
+            console.error("Error al enviar el voto:", err);
             setError("Error al enviar el voto.");
         } finally {
             setIsSubmitting(false);
@@ -60,9 +59,14 @@ export const VoteForm = ({ voterId }: { voterId: string }) => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     {candidates.map((candidate) => (
-                        <div
+                        <button
                             key={candidate.id}
                             onClick={() => setSelectedCandidate(candidate.id)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    setSelectedCandidate(candidate.id);
+                                }
+                            }}
                             className={`cursor-pointer p-6 rounded-xl transition-all duration-300 ${selectedCandidate === candidate.id
                                 ? "bg-blue-50 border-2 border-blue-500"
                                 : "bg-white border-2 border-gray-200 hover:border-blue-300"
@@ -80,10 +84,10 @@ export const VoteForm = ({ voterId }: { voterId: string }) => {
                                     {candidate.name}
                                 </h3>
                                 <span className="text-sm text-gray-500 mt-2">
-                                   {candidate.id.toUpperCase()}
+                                    {candidate.id.toUpperCase()}
                                 </span>
                             </div>
-                        </div>
+                        </button>
                     ))}
                 </div>
 

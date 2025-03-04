@@ -1,5 +1,9 @@
 'use client'
 import { useState } from "react";
+
+interface ErrorAPI {
+    error: string;
+}
 import { useRouter } from "next/navigation";
 import { loginUser, registerUser } from "../services/userService";
 import { useUserStore } from "../store/userStore";
@@ -54,12 +58,11 @@ export const AuthForm = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!validateForm()) return;
-        const endpoint = isRegistered ? '/users/login' : '/users/register';
 
         try {
             console.log('formData:', formData);
             if (isRegistered) {
-                const response = await loginUser(formData);
+                const response = await loginUser({ document_number: formData.document_number, password: formData.password, document_type: formData.document_type });
                 console.log("Usuario logueado: ", response);
                 useUserStore.getState().setUserLogin(response.user.id, response.user.name, response.token);
                 router.push("/vote");
@@ -67,15 +70,17 @@ export const AuthForm = () => {
                 const response = await registerUser(formData);
                 resetForm();
                 setIsRegistered(true);
-                // useUserStore.getState().setUser(response.user[0].id, response.user[0].name);
                 console.log("Usuario registrado: ", response);
-                // console.log(isRegistered ? 'Login exitoso' : 'Registro exitoso', response.user);
                 router.push("/");
             }
 
         } catch (error) {
             console.error('Error: funcion', error);
-            setFormError(error.error);
+            if (error) {
+                setFormError((error as ErrorAPI).error);
+            } else {
+                setFormError("An unknown error occurred.");
+            }
         }
     };
 

@@ -1,6 +1,6 @@
 'use client'
 import { getVoteCount } from "@/services/userService";
-import axios from "axios";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface CandidateResult {
@@ -62,10 +62,12 @@ export const AuditInterface = () => {
                         {results.map((candidate) => (
                             <div key={candidate.id} className="bg-white rounded-xl p-6 shadow-lg">
                                 <div className="flex items-center gap-6">
-                                    <img
+                                    <Image
                                         src={candidate.image}
                                         alt={candidate.name}
-                                        className="w-20 h-20 rounded-full object-cover border-4 border-blue-100"
+                                        width={80}
+                                        height={80}
+                                        className="rounded-full object-cover border-4 border-blue-100"
                                     />
                                     <div className="flex-1">
                                         <div className="flex justify-between items-center mb-2">

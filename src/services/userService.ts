@@ -1,22 +1,32 @@
-import { useUserStore } from "@/store/userStore";
+import axios from "axios";
 import axiosClient from "../utils/axiosClient";
+import { useUserStore } from "@/store/userStore";
 
 // Registrar un usuario
-export const registerUser = async (userData) => {
+export const registerUser = async (userData: { document_type: string; document_number: string; name: string; password: string; birthDate: string; }) => {
     try {
         const response = await axiosClient.post("/users/register", userData);
         return response.data;
     } catch (error) {
-        throw error.response?.data || error.message;
+        if (axios.isAxiosError(error)) {
+            throw error.response?.data || error.message;
+        } else {
+            throw error;
+        }
     }
 };
-export const loginUser = async (userData) => {
+export const loginUser = async (userData: { document_number: string; password: string; document_type: string; }) => {
     try {
+        console.log("userData:", userData);
         const response = await axiosClient.post("/users/login", userData);
-        console.log("Usuario logueado: " + response);
+        console.log("Usuario logueado: ", response);
         return response.data;
     } catch (error) {
-        throw error.response?.data || error.message;
+        if (axios.isAxiosError(error)) {
+            throw error.response?.data || error.message;
+        } else {
+            throw error;
+        }
     }
 };
 // Obtener lista de usuarios
@@ -25,12 +35,15 @@ export const getUsers = async () => {
         const response = await axiosClient.get("/users");
         return response.data;
     } catch (error) {
-        throw error.response?.data || error.message;
+        if (axios.isAxiosError(error)) {
+            throw error.response?.data || error.message;
+        } else {
+            throw error;
+        }
     }
 };
 
-
-// 🔹 Enviar un voto con el token de autenticación
+// Método para votar
 export const voteCandidate = async (userId: string, candidate: string) => {
     try {
         const token = useUserStore.getState().token; // 🔹 Obtener el token del estado global
@@ -44,10 +57,13 @@ export const voteCandidate = async (userId: string, candidate: string) => {
                 },
             }
         );
-
         return response.data;
     } catch (error) {
-        throw error.response?.data || error.message;
+        if (axios.isAxiosError(error)) {
+            throw error.response?.data || error.message;
+        } else {
+            throw error;
+        }
     }
 };
 
@@ -56,7 +72,11 @@ export const hasUserVoted = async (voterId: string) => {
         const response = await axiosClient.get(`/votes/has-voted/${voterId}`);
         return response.data;
     } catch (error) {
-        throw error.response?.data || error.message;
+        if (axios.isAxiosError(error)) {
+            throw error.response?.data || error.message;
+        } else {
+            throw error;
+        }
     }
 };
 
@@ -65,6 +85,10 @@ export const getVoteCount = async () => {
         const response = await axiosClient.get("/votes/count");
         return response.data;
     } catch (error) {
-        throw error.response?.data || error.message;
+        if (axios.isAxiosError(error)) {
+            throw error.response?.data || error.message;
+        } else {
+            throw error;
+        }
     }
 };

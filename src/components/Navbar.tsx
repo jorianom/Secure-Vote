@@ -3,6 +3,7 @@ import { useUserStore } from "../store/userStore";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FiMenu, FiX } from "react-icons/fi"; // Iconos para menú responsivo
+import Link from "next/link";
 
 const Navbar = () => {
     const { userId, name, clearUser } = useUserStore();
@@ -28,11 +29,11 @@ const Navbar = () => {
                     ${menuOpen ? "block" : "hidden"} md:flex-row`}>
                     {
                         !userId ? (
-                            <li><a href="/" className="block px-4 py-2 text-white hover:bg-blue-500 rounded-md">Inicio</a></li>
+                            <li><Link href="/" className="block px-4 py-2 text-white hover:bg-blue-500 rounded-md">Inicio</Link></li>
                         ) : null
                     }
-                    <li><a href="/vote" className="block px-4 py-2 text-white hover:bg-blue-500 rounded-md">Votar</a></li>
-                    <li><a href="/results" className="block px-4 py-2 text-white hover:bg-blue-500 rounded-md">Resultados</a></li>
+                    <li><Link href="/vote" className="block px-4 py-2 text-white hover:bg-blue-500 rounded-md">Votar</Link></li>
+                    <li><Link href="/results" className="block px-4 py-2 text-white hover:bg-blue-500 rounded-md">Resultados</Link></li>
                 </ul>
 
                 {/* Usuario & Botón de sesión */}
@@ -45,9 +46,9 @@ const Navbar = () => {
                             </button>
                         </div>
                     ) : (
-                        <a href="/" className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+                        <Link href="/" className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
                             Iniciar Sesión
-                        </a>
+                        </Link>
                     )}
                 </div>
             </div>

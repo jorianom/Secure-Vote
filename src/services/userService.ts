@@ -5,7 +5,7 @@ import { useUserStore } from "@/store/userStore";
 // Registrar un usuario
 export const registerUser = async (userData: { document_type: string; document_number: string; name: string; password: string; birthDate: string; }) => {
     try {
-        const response = await axiosClient.post("/users/register", userData);
+        const response = await axiosClient.post("/api/users/register", userData);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -18,7 +18,7 @@ export const registerUser = async (userData: { document_type: string; document_n
 export const loginUser = async (userData: { document_number: string; password: string; document_type: string; }) => {
     try {
         console.log("userData:", userData);
-        const response = await axiosClient.post("/users/login", userData);
+        const response = await axiosClient.post("/api/users/login", userData);
         console.log("Usuario logueado: ", response);
         return response.data;
     } catch (error) {
@@ -32,7 +32,7 @@ export const loginUser = async (userData: { document_number: string; password: s
 // Obtener lista de usuarios
 export const getUsers = async () => {
     try {
-        const response = await axiosClient.get("/users");
+        const response = await axiosClient.get("/api/users");
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -49,7 +49,7 @@ export const voteCandidate = async (userId: string, candidate: string) => {
         const token = useUserStore.getState().token; // 🔹 Obtener el token del estado global
 
         const response = await axiosClient.post(
-            "/votes/vote",
+            "/api/votes/vote",
             { userId, candidate },
             {
                 headers: {
@@ -69,7 +69,7 @@ export const voteCandidate = async (userId: string, candidate: string) => {
 
 export const hasUserVoted = async (voterId: string) => {
     try {
-        const response = await axiosClient.get(`/votes/has-voted/${voterId}`);
+        const response = await axiosClient.get(`/api/votes/has-voted/${voterId}`);
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -82,7 +82,7 @@ export const hasUserVoted = async (voterId: string) => {
 
 export const getVoteCount = async () => {
     try {
-        const response = await axiosClient.get("/votes/count");
+        const response = await axiosClient.get("/api/votes/count");
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {

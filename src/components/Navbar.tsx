@@ -26,7 +26,11 @@ const Navbar = () => {
                 {/* Links de navegación */}
                 <ul className={`absolute top-16 left-0 w-full bg-blue-600 md:flex md:static md:w-auto md:space-x-6 md:items-center 
                     ${menuOpen ? "block" : "hidden"} md:flex-row`}>
-                    <li><a href="/" className="block px-4 py-2 text-white hover:bg-blue-500 rounded-md">Inicio</a></li>
+                    {
+                        !userId ? (
+                            <li><a href="/" className="block px-4 py-2 text-white hover:bg-blue-500 rounded-md">Inicio</a></li>
+                        ) : null
+                    }
                     <li><a href="/vote" className="block px-4 py-2 text-white hover:bg-blue-500 rounded-md">Votar</a></li>
                     <li><a href="/results" className="block px-4 py-2 text-white hover:bg-blue-500 rounded-md">Resultados</a></li>
                 </ul>

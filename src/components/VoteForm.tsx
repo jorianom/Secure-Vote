@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import Image from "next/image";
 import { voteCandidate } from "@/services/userService";
 import { useUserStore } from "@/store/userStore";
+import { useRouter } from 'next/navigation'
 
 const candidates = [
     { id: "candidato1", name: "María García", image: "https://picsum.photos/200/300" },
@@ -13,7 +14,8 @@ const candidates = [
 ];
 
 export const VoteForm = ({ voterId }: { voterId: string }) => {
-    if (voterId === null) return null; 
+    const router = useRouter();
+    if (voterId === null) return null;
     const { userId, name } = useUserStore();
     const [selectedCandidate, setSelectedCandidate] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,6 +43,7 @@ export const VoteForm = ({ voterId }: { voterId: string }) => {
             const response = await voteCandidate(userId, selectedCandidate);
             console.log("Voto registrado:", response);
             setVoteSuccess(true);
+            setTimeout(() => router.push('/'), 2000);
         } catch (err) {
             setError("Error al enviar el voto.");
         } finally {
@@ -49,7 +52,7 @@ export const VoteForm = ({ voterId }: { voterId: string }) => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 rounded-lg py-12 px-4">
             <div className="max-w-4xl w-full space-y-8">
                 <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
                     Elecciones 2024
@@ -77,7 +80,7 @@ export const VoteForm = ({ voterId }: { voterId: string }) => {
                                     {candidate.name}
                                 </h3>
                                 <span className="text-sm text-gray-500 mt-2">
-                                    {candidate.id.toUpperCase()}
+                                   {candidate.id.toUpperCase()}
                                 </span>
                             </div>
                         </div>
@@ -99,7 +102,7 @@ export const VoteForm = ({ voterId }: { voterId: string }) => {
 
                 {voteSuccess && (
                     <div className="text-center mt-4 text-green-600 font-medium">
-                        ¡Voto registrado exitosamente!
+                        ¡Voto registrado exitosamente! Espera un momento...
                     </div>
                 )}
             </div>

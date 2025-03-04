@@ -5,6 +5,7 @@ import { hasUserVoted } from "@/services/userService";
 import { VoteForm } from "./VoteForm";
 import { VoteConfirmation } from "./VoteConfirmation ";
 const mockVoteData = {
+    name: "",
     candidate: {
         id: "candidato1",
         name: "María García",
@@ -18,7 +19,8 @@ const mockVoteData = {
     transactionId: "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef", // ID de transacción en blockchain
 };
 export const CheckVoteStatus = () => {
-    const { userId } = useUserStore();
+    const [dataVote, setDataVote] = useState({ mockVoteData });
+    const { userId, name } = useUserStore();
     const [hasVoted, setHasVoted] = useState<boolean | null>(null);
 
     useEffect(() => {
@@ -29,7 +31,9 @@ export const CheckVoteStatus = () => {
             }
             try {
                 const result = await hasUserVoted(userId);
-                setHasVoted(result);
+                console.log('hasUserVoted:', result);
+                setDataVote(result.vote);
+                setHasVoted(result.hasVoted);
             } catch (error) {
                 setHasVoted(false);
             }
@@ -44,7 +48,7 @@ export const CheckVoteStatus = () => {
     return (
         <div>
             {hasVoted === true && userId ? (
-                <VoteConfirmation voteData={mockVoteData} />
+                <VoteConfirmation voteData={dataVote} name={name} />
             ) : (
                 <VoteForm voterId={userId} />
             )

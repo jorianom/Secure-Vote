@@ -1,19 +1,15 @@
 'use client'
-// import { VoteReceipt } from "@/types";
 import Image from "next/image";
 import { CheckCircle2 } from "lucide-react";
 
-// interface VoteConfirmationProps {
-//     voteData: VoteReceipt; // Tipo esperado desde la API
-// }
-
-export const VoteConfirmation = ({ voteData }) => {
-    const truncateHash = (hash: string, length = 6) => {
+export const VoteConfirmation = ({ voteData, name }) => {
+    console.log('voteData:', voteData);
+    const truncateHash = 
+    (hash: string, length = 6) => {
         return `${hash.substring(0, length)}...${hash.substring(hash.length - length)}`;
     };
-
     return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gray-50 rounded-lg flex items-center justify-center p-4">
             <div className="max-w-2xl w-full bg-white rounded-xl shadow-lg p-8 relative overflow-hidden">
                 {/* Sello de autenticidad */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -31,19 +27,19 @@ export const VoteConfirmation = ({ voteData }) => {
 
                     {/* Información del candidato */}
                     <div className="flex flex-col md:flex-row items-center gap-6 mb-8">
-                        <Image
+                        {/* <Image
                             src={voteData.candidate.image}
                             alt={voteData.candidate.name}
                             width={160}
                             height={160}
                             className="w-40 h-40 rounded-full object-cover border-4 border-blue-100"
-                        />
+                        /> */}
                         <div className="text-center md:text-left">
                             <h3 className="text-2xl font-semibold text-gray-900">
-                                {voteData.candidate.name}
+                                {name}
                             </h3>
                             <p className="text-gray-600 mt-2">
-                                ID Candidato: {voteData.candidate.id.toUpperCase()}
+                                {voteData.document_number}
                             </p>
                         </div>
                     </div>
@@ -54,13 +50,13 @@ export const VoteConfirmation = ({ voteData }) => {
                             <div>
                                 <label className="block text-sm font-medium text-gray-600">Firma Digital (r)</label>
                                 <p className="mt-1 font-mono text-gray-800 break-all">
-                                    {truncateHash(voteData.signature.r)}
+                                    {truncateHash(voteData.r)}
                                 </p>
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-600">Firma Digital (s)</label>
                                 <p className="mt-1 font-mono text-gray-800 break-all">
-                                    {truncateHash(voteData.signature.s)}
+                                    {truncateHash(voteData.s)}
                                 </p>
                             </div>
                         </div>
@@ -69,13 +65,13 @@ export const VoteConfirmation = ({ voteData }) => {
                             <div>
                                 <label className="block text-sm font-medium text-gray-600">Fecha del Voto</label>
                                 <p className="mt-1 text-gray-800">
-                                    {new Date(voteData.timestamp).toLocaleString()}
+                                    {new Date(voteData.created_at).toLocaleString()}
                                 </p>
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-600">ID de Transacción</label>
                                 <p className="mt-1 font-mono text-gray-800 break-all">
-                                    {truncateHash(voteData.transactionId)}
+                                    {truncateHash(voteData.transaction_id)}
                                 </p>
                             </div>
                         </div>

@@ -44,7 +44,7 @@ export const AuditInterface = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8 flex items-center justify-center">
+        <div className="min-h-screen bg-gray-50 rounded-lg p-8 flex items-center justify-center">
             <div className="max-w-4xl w-full space-y-8">
                 <div className="text-center mb-12">
                     <h1 className="text-4xl font-bold text-gray-900 mb-2">Auditoría en Tiempo Real</h1>

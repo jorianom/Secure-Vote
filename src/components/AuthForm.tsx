@@ -1,24 +1,27 @@
 'use client'
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { registerUser } from "../services/userService";
+import { loginUser, registerUser } from "../services/userService";
 import { useUserStore } from "../store/userStore";
 
-
+const initialFormState = {
+    document_type: "DNI",
+    document_number: "",
+    name: "",
+    password: "",
+    birthDate: "",
+};
 export const AuthForm = () => {
     const [isRegistered, setIsRegistered] = useState(true);
     const router = useRouter();
-    const [formData, setFormData] = useState({
-        document_type: 'DNI',
-        document_number: '',
-        name: '',
-        password: '',
-        birthDate: ''
-    });
+    const [formData, setFormData] = useState(initialFormState);
 
     const docTypes = ['DNI', 'Pasaporte', 'Cédula', 'Licencia'];
     const [formError, setFormError] = useState<string | null>(null); // Error general
 
+    const resetForm = () => {
+        setFormData(initialFormState);
+    };
     const validateForm = (): boolean => {
         // Validar Número de Documento (solo números, mínimo 5 dígitos)
         if (!/^\d{5,15}$/.test(formData.document_number)) {
@@ -56,20 +59,23 @@ export const AuthForm = () => {
         try {
             console.log('formData:', formData);
             if (isRegistered) {
-                const fakeUser = { id: "4", name: "John Riaño" };
-                
-                useUserStore.getState().setUser(fakeUser.id, fakeUser.name);
+                const response = await loginUser(formData);
+                console.log("Usuario logueado: ", response);
+                useUserStore.getState().setUserLogin(response.user.id, response.user.name, response.token);
                 router.push("/vote");
             } else {
                 const response = await registerUser(formData);
-                useUserStore.getState().setUser(response.user[0].document_number, response.user[0].name);
-                console.log("Usuario registrado: " + response);
-                console.log(isRegistered ? 'Login exitoso' : 'Registro exitoso', response.user);
-                router.push("/vote");
+                resetForm();
+                setIsRegistered(true);
+                // useUserStore.getState().setUser(response.user[0].id, response.user[0].name);
+                console.log("Usuario registrado: ", response);
+                // console.log(isRegistered ? 'Login exitoso' : 'Registro exitoso', response.user);
+                router.push("/");
             }
 
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error: funcion', error);
+            setFormError(error.error);
         }
     };
 

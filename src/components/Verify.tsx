@@ -13,7 +13,7 @@ export const Verify = () => {
         r: "",
         s: ""
     });
-    const [verification, setVerification] = useState(null);
+    const [verification, setVerification] = useState("");
     const [error, setError] = useState("");
 
     const handleVerify = async () => {
@@ -30,14 +30,21 @@ export const Verify = () => {
             console.log("data", data);
             setVerification(data.message);
             setError("");
+            setTimeout(() => {
+                setVerification("");
+            }, 3000);
+
         } catch (error) {
             console.error("Error al verificar el voto:", error);
-            setVerification(null);
             if (error) {
                 setError((error as ErrorAPI).error);
             } else {
                 setError("An unknown error occurred.");
             }
+            setVerification("");
+            setTimeout(() => {
+                setError("");
+            }, 3000);
         }
     };
 

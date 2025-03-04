@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "axios": "^1.7.9",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.477.0",
     "next": "15.1.7",
     "react": "^19.0.0",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/prop-types": "^15.7.14",
     "@types/react": "^19",

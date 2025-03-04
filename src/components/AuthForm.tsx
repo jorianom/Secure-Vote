@@ -7,6 +7,7 @@ interface ErrorAPI {
 import { useRouter } from "next/navigation";
 import { loginUser, registerUser } from "../services/userService";
 import { useUserStore } from "../store/userStore";
+import { login } from "@/utils/cookies";
 
 const initialFormState = {
     document_type: "DNI",
@@ -40,7 +41,7 @@ export const AuthForm = () => {
 
         // // Validar Contraseña (mínimo 8 caracteres, al menos una mayúscula y un número)
         if (!isRegistered) {
-            if (!/^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/.test(formData.password)) {
+            if (!/^(?=.*[A-Z])(?=.*\d)[A-Za-z\dñÑáéíóúÁÉÍÓÚ]{8,}$/.test(formData.password)) {
                 setFormError("Contraseña inválida. Debe tener mínimo 8 caracteres, una mayúscula y un número.");
                 return false;
             }
@@ -67,6 +68,7 @@ export const AuthForm = () => {
                 const response = await loginUser({ document_number: formData.document_number, password: formData.password, document_type: formData.document_type });
                 console.log("Usuario logueado: ", response);
                 useUserStore.getState().setUserLogin(response.user.id, response.user.name, response.token);
+                login(response.user.id);
                 router.push("/vote");
             } else {
                 const response = await registerUser(formData);

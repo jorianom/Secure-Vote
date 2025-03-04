@@ -9,12 +9,13 @@ const ProtectedAuth = ({ children }: { children: React.ReactNode }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        console.log("userId:", userId);
         if (!userId) {
             router.push("/"); // 🔹 Redirige a Home si no tiene userId
         } else {
             setLoading(false); // 🔹 Si está autenticado, muestra la página
         }
-    }, [userId, router]);
+    }, [userId]);
 
     if (loading) return <p className="text-center text-gray-500">Redirecting...</p>;
 

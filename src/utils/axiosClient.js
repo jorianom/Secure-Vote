@@ -1,5 +1,6 @@
 import { useUserStore } from "@/store/userStore";
 import axios from "axios";
+import { logout } from "./cookies";
 
 const axiosClient = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -25,6 +26,7 @@ axiosClient.interceptors.response.use(
 
             // 🔹 Cerrar sesión (borrar usuario de Zustand o localStorage)
             useUserStore.getState().clearUser(); // Asegúrate de que este método existe
+            logout();
             alert("Tu sesión ha expirado, vuelve a iniciar sesión.");
             // 🔹 Redirigir al login
             window.location.href = "/";

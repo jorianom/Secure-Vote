@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FiMenu, FiX } from "react-icons/fi"; // Iconos para menú responsivo
 import Link from "next/link";
+import { logout } from "@/utils/cookies";
 
 const Navbar = () => {
     const { userId, name, clearUser } = useUserStore();
@@ -12,6 +13,7 @@ const Navbar = () => {
     console.log(name);
     const handleLogout = () => {
         clearUser();
+        logout();
         alert("Sesión cerrada");
         router.push("/");
     };

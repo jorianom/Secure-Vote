@@ -21,7 +21,6 @@ export const VoteForm = ({ voterId }: { voterId: string }) => {
     const [voteSuccess, setVoteSuccess] = useState(false);
     const [isClient, setIsClient] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    console.log("userId:", error);
     useEffect(() => {
         setIsClient(true); // 🔹 Asegura que el componente solo se renderice en el cliente
     }, []);
@@ -41,7 +40,7 @@ export const VoteForm = ({ voterId }: { voterId: string }) => {
             const response = await voteCandidate(userId, selectedCandidate);
             console.log("Voto registrado:", response);
             setVoteSuccess(true);
-            setTimeout(() => router.push('/'), 2000);
+            setTimeout(() => window.location.href = '/vote', 3000);
         } catch (err) {
             console.error("Error al enviar el voto:", err);
             setError("Error al enviar el voto.");

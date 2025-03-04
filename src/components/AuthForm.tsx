@@ -39,9 +39,11 @@ export const AuthForm = () => {
         }
 
         // // Validar Contraseña (mínimo 8 caracteres, al menos una mayúscula y un número)
-        if (!/^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/.test(formData.password)) {
-            setFormError("Contraseña inválida. Debe tener mínimo 8 caracteres, una mayúscula y un número.");
-            return false;
+        if (!isRegistered) {
+            if (!/^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/.test(formData.password)) {
+                setFormError("Contraseña inválida. Debe tener mínimo 8 caracteres, una mayúscula y un número.");
+                return false;
+            }
         }
 
         // // Validar Fecha de Nacimiento (mayor de 18 años)

@@ -1,19 +1,24 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "../store/userStore";
 
 const ProtectedAuth = ({ children }: { children: React.ReactNode }) => {
     const { userId } = useUserStore();
     const router = useRouter();
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (userId) {
-            router.replace("/vote"); // 🔹 Redirige si el usuario está autenticado
+        if (!userId) {
+            router.push("/"); // 🔹 Redirige a Home si no tiene userId
+        } else {
+            setLoading(false); // 🔹 Si está autenticado, muestra la página
         }
     }, [userId, router]);
 
-    return !userId ? children : null; // 🔹 Si hay usuario, no muestra el contenido
+    if (loading) return <p className="text-center text-gray-500">Redirecting...</p>;
+
+    return <>{children}</>;
 };
 
 export default ProtectedAuth;

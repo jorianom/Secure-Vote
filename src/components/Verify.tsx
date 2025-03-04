@@ -29,8 +29,10 @@ export const Verify = () => {
             }
             console.log("data", data);
             setVerification(data.message);
+            setError("");
         } catch (error) {
-            console.error("Error al verificar el voto:", error);          
+            console.error("Error al verificar el voto:", error);
+            setVerification(null);
             if (error) {
                 setError((error as ErrorAPI).error);
             } else {

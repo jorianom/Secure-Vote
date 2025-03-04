@@ -61,7 +61,7 @@ export const AuthForm = () => {
                 useUserStore.getState().setUserLogin(response.user.id, response.user.name, response.token);
                 login(response.user.id);
                 setSuccessMessage("Inicio de sesión exitoso. Redirigiendo...");
-                setTimeout(() => router.push("/vote"), 2000);
+                setTimeout(() => window.location.href = '/vote', 2000);
             } else {
                 await registerUser(formData);
                 resetForm();

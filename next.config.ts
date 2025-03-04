@@ -1,10 +1,6 @@
+// next.config.js
 module.exports = {
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "picsum.photos",
-      },
-    ],
+    domains: ["secure-vote-chi.vercel.app"], // Agrega tu dominio aquí
   },
 };

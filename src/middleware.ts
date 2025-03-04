@@ -5,9 +5,9 @@ const protectedRoutes = ["/vote"]; // Rutas que requieren sesión
 const guestOnlyRoutes = ["/"]; // Rutas que NO deben ser accesibles con sesión activa
 
 export function middleware(req: NextRequest) {
-    const userId = req.cookies.get("userId")?.value; // 🔹 Leer el userId desde cookies
-    const currentPath = req.nextUrl.pathname; // 🔹 Obtener la ruta actual
-
+    const userId = req.cookies.get("userId")?.value; 
+    const currentPath = req.nextUrl.pathname; 
+    console.log(userId, currentPath)
     // 🔹 1️⃣ Si el usuario NO está autenticado y quiere entrar a una ruta protegida, redirigirlo a "/"
     if (!userId && protectedRoutes.includes(currentPath)) {
         return NextResponse.redirect(new URL("/", req.url));

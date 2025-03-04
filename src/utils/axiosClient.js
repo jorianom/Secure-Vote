@@ -21,15 +21,15 @@ const axiosClient = axios.create({
 axiosClient.interceptors.response.use(
     (response) => response, // ✅ Devolver la respuesta normal si no hay errores
     (error) => {
+        console.error("Error en la API:", error.response?.data || error.message);
         if (error.response?.status === 403) {
             console.error("🔴 Token inválido o expirado, cerrando sesión...");
 
             // 🔹 Cerrar sesión (borrar usuario de Zustand o localStorage)
             useUserStore.getState().clearUser(); // Asegúrate de que este método existe
-            logout();
             alert("Tu sesión ha expirado, vuelve a iniciar sesión.");
-            // 🔹 Redirigir al login
-            window.location.href = "/";
+            logout();
+            // window.location.href = "/";
         }
 
         return Promise.reject(error);

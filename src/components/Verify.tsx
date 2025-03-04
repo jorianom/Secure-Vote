@@ -18,7 +18,7 @@ export const Verify = () => {
 
     const handleVerify = async () => {
         try {
-            if (!signature.document_number || !signature.public_base64 || !signature.r || !signature.s) {
+            if (!signature.public_base64 || !signature.r || !signature.s) {
                 setError("Debes completar todos los campos.");
                 return;
             }

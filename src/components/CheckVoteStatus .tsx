@@ -16,6 +16,8 @@ interface VoteData {
     created_at: string;
     public_base64: string;
 }
+
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { useUserStore } from "../store/userStore";
 import { hasUserVoted } from "@/services/userService";
@@ -24,7 +26,8 @@ import { VoteConfirmation } from "./VoteConfirmation ";
 
 export const CheckVoteStatus = () => {
     const [dataVote, setDataVote] = useState<VoteData | null>(null);
-    const { userId, name } = useUserStore();
+    const { name } = useUserStore();
+    const userId = Cookies.get("userId");
     const [hasVoted, setHasVoted] = useState<boolean | null>(null);
 
     useEffect(() => {
@@ -46,7 +49,7 @@ export const CheckVoteStatus = () => {
     }, [userId]);
 
     if (hasVoted === null || userId === null) {
-        return <p>Cargando...</p>;
+        return <p>Cargando Voto...</p>;
     }
 
     return (
@@ -54,7 +57,7 @@ export const CheckVoteStatus = () => {
             {hasVoted === true && userId && dataVote ? (
                 <VoteConfirmation voteData={dataVote} name={name || ''} />
             ) : (
-                <VoteForm voterId={userId} />
+                <VoteForm voterId={userId || ''} />
             )
 
             }

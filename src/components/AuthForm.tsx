@@ -22,7 +22,8 @@ export const AuthForm = () => {
     const [formData, setFormData] = useState(initialFormState);
 
     const docTypes = ['DNI', 'Pasaporte', 'Cédula', 'Licencia'];
-    const [formError, setFormError] = useState<string | null>(null); // Error general
+    const [formError, setFormError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
     const resetForm = () => {
         setFormData(initialFormState);
@@ -47,14 +48,6 @@ export const AuthForm = () => {
             }
         }
 
-        // // Validar Fecha de Nacimiento (mayor de 18 años)
-        // const birthDate = new Date(formData.birthDate);
-        // const age = new Date().getFullYear() - birthDate.getFullYear();
-        // if (isNaN(birthDate.getTime()) || age < 18) {
-        //     setFormError("Debes ser mayor de 18 años para registrarte.");
-        //     return false;
-        // }
-
         setFormError(null);
         return true;
     };
@@ -67,7 +60,8 @@ export const AuthForm = () => {
                 const response = await loginUser({ document_number: formData.document_number, password: formData.password, document_type: formData.document_type });
                 useUserStore.getState().setUserLogin(response.user.id, response.user.name, response.token);
                 login(response.user.id);
-                router.push("/vote");
+                setSuccessMessage("Inicio de sesión exitoso. Redirigiendo...");
+                setTimeout(() => router.push("/vote"), 2000);
             } else {
                 await registerUser(formData);
                 resetForm();
@@ -100,6 +94,10 @@ export const AuthForm = () => {
             {formError && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4">
                     {formError}
+                </div>
+            )}{successMessage && (
+                <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mt-4">
+                    {successMessage}
                 </div>
             )}
             <form onSubmit={handleSubmit} className="space-y-6">

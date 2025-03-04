@@ -61,13 +61,15 @@ export const AuditInterface = () => {
                         {results.map((candidate) => (
                             <div key={candidate.id} className="bg-white rounded-xl p-6 shadow-lg">
                                 <div className="flex items-center gap-6">
-                                    <Image
-                                        src={candidate.image}
-                                        alt={candidate.name}
-                                        width={80}
-                                        height={80}
-                                        className="rounded-full object-cover border-4 border-blue-100"
-                                    />
+                                    <div className="w-20 h-20"> {/* Contenedor con tamaño fijo */}
+                                        <Image
+                                            src={candidate.image}
+                                            alt={candidate.name}
+                                            width={80}
+                                            height={80}
+                                            className="rounded-full object-cover border-4 border-blue-100 aspect-square"
+                                        />
+                                    </div>
                                     <div className="flex-1">
                                         <div className="flex justify-between items-center mb-2">
                                             <h3 className="text-xl font-semibold text-gray-900">

@@ -14,6 +14,7 @@ interface VoteData {
     transactionId: string;
     document_number: string;
     created_at: string;
+    public_base64: string;
 }
 import { useEffect, useState } from "react";
 import { useUserStore } from "../store/userStore";

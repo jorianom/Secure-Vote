@@ -6,10 +6,10 @@ import { voteCandidate } from "@/services/userService";
 import { useUserStore } from "@/store/userStore";
 
 const candidates = [
-    { id: "candidato1", name: "María García", image: "https://picsum.photos/200/300" },
-    { id: "candidato2", name: "Carlos Rodríguez", image: "https://picsum.photos/200/200" },
-    { id: "candidato3", name: "Ana Fernández", image: "https://picsum.photos/400/300" },
-    { id: "candidato4", name: "Luis Martínez", image: "https://picsum.photos/300/300" }
+    { id: "candidato1", name: "Gustavo Bolivar", image: "/images/1.png" },
+    { id: "candidato2", name: "María Fernanda Cabal", image: "/images/2.jpeg" },
+    { id: "candidato3", name: "Vicky Dávila", image: "/images/3.png" },
+    { id: "candidato4", name: "Polo Polo", image: "/images/4.png" }
 ];
 
 export const VoteForm = ({ voterId }: { voterId: string }) => {
@@ -50,7 +50,7 @@ export const VoteForm = ({ voterId }: { voterId: string }) => {
         <div className="min-h-screen flex items-center justify-center bg-gray-50 rounded-lg py-12 px-4">
             <div className="max-w-4xl w-full space-y-8">
                 <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
-                    Elecciones 2024
+                    Elecciones Colombia 2026
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

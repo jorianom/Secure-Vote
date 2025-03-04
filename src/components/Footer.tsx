@@ -22,7 +22,7 @@ export const Footer = () => {
                         rel="noopener noreferrer"
                         className="hover:text-purple-600 transition-colors duration-300"
                     >
-                        @jorianom
+                        @us
                     </a>
                 </p>
             </div>

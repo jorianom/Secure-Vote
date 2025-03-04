@@ -35,6 +35,7 @@ const Navbar = () => {
                     }
                     <li><Link href="/vote" className="block px-4 py-2 text-white hover:bg-blue-500 rounded-md">Votar</Link></li>
                     <li><Link href="/results" className="block px-4 py-2 text-white hover:bg-blue-500 rounded-md">Resultados</Link></li>
+                    <li><Link href="/verify" className="block px-4 py-2 text-white hover:bg-blue-500 rounded-md">Verifica</Link></li>
                 </ul>
 
                 {/* Usuario & Botón de sesión */}

@@ -90,3 +90,30 @@ export const getVoteCount = async () => {
         }
     }
 };
+
+
+export const verifyVote = async ({ document_number, public_base64, r, s, }: {
+    document_number: string; public_base64: string; r: string; s: string;
+}) => {
+    try {
+        const token = useUserStore.getState().token;
+        const response = await axiosClient.post("/api/votes/verifyVote", {
+            document_number,
+            public_base64,
+            r,
+            s,
+        },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`, // 🔹 Enviar token en los headers
+                },
+            });
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            throw error.response?.data || error.message;
+        } else {
+            throw error;
+        }
+    }
+};

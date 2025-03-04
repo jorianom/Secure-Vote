@@ -11,6 +11,7 @@ interface VoteData {
     s: string;
     created_at: string;
     transaction_id: string;
+    public_base64: string;
 }
 
 interface VoteConfirmationProps {
@@ -64,15 +65,20 @@ export const VoteConfirmation = ({ voteData, name }: VoteConfirmationProps) => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-medium text-gray-600">Firma Digital (r)</label>
-                                <p className="mt-1 font-mono text-gray-800 break-all">
-                                    {truncateHash(voteData.r)}
-                                </p>
+                                <div className="mt-2 w-full max-w-3xl p-2 border border-gray-300 rounded-lg bg-gray-50">
+                                    <p className="font-mono text-gray-800 text-sm whitespace-pre-wrap break-words">
+                                        {voteData.r}
+                                    </p>
+                                </div>
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-gray-600">Firma Digital (s)</label>
-                                <p className="mt-1 font-mono text-gray-800 break-all">
-                                    {truncateHash(voteData.s)}
-                                </p>
+                                <div className="mt-2 w-full max-w-3xl p-2 border border-gray-300 rounded-lg bg-gray-50">
+                                    <p className="font-mono text-gray-800 text-sm whitespace-pre-wrap break-words">
+                                        {voteData.s}
+                                    </p>
+                                </div>
+
                             </div>
                         </div>
 
@@ -96,7 +102,15 @@ export const VoteConfirmation = ({ voteData, name }: VoteConfirmationProps) => {
                     <div className="mt-8 flex items-center justify-center gap-2 text-green-600">
                         <CheckCircle2 className="w-6 h-6" />
                         <span className="font-semibold">Voto autenticado y registrado</span>
+                    </div><div className="mt-8 flex flex-col items-center justify-center gap-2 text-green-600">
+                        <span className="font-semibold">PUBLIC KEY:</span>
+                        <div className="w-full max-w-3xl p-2 border border-green-300 rounded-lg bg-gray-50 overflow-x-auto">
+                            <pre className="text-xs font-mono whitespace-pre-wrap break-words">
+                                {voteData.public_base64}
+                            </pre>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>

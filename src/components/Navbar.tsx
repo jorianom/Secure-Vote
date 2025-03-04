@@ -1,4 +1,6 @@
 "use client";
+
+import Cookies from "js-cookie";
 import { useUserStore } from "../store/userStore";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -7,7 +9,8 @@ import Link from "next/link";
 import { logout } from "@/utils/cookies";
 
 const Navbar = () => {
-    const { userId, name, clearUser } = useUserStore();
+    const { name, clearUser } = useUserStore();
+    const userId = Cookies.get("userId");
     const [menuOpen, setMenuOpen] = useState(false);
     const router = useRouter();
     const handleLogout = () => {
